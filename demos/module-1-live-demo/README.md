@@ -6,6 +6,7 @@ A Flask bookstore API with **two bugs** for the Module 1 "wow factor" demo. The 
 
 ```bash
 cd demos/module-1-live-demo
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```

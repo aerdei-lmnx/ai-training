@@ -52,6 +52,7 @@ There is a **buggy Flask app** in the `buggy-orders-app/` directory. It has the 
 
 ```bash
 cd buggy-orders-app
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
