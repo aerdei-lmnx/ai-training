@@ -906,27 +906,46 @@ prompts/
 
   <section>
     <h2>The Triangle: Pick Two</h2>
-    <div style="font-size: 0.8em; text-align: center;">
-      <pre style="font-size: 0.8em; text-align: center; background: none; box-shadow: none;">
-         QUALITY
-          /\
-         /  \
-        /    \
-       /______\
-    SPEED    COST
-      </pre>
-      <div class="two-column" style="font-size: 0.75em;">
-        <div>
-          <p><strong>Quality + Speed</strong> = Expensive<br>
-          <span style="color: #888;">(Opus, GPT-5.4 Pro)</span></p>
-        </div>
-        <div>
-          <p><strong>Quality + Cheap</strong> = Slow<br>
-          <span style="color: #888;">(Reasoning models with wait)</span></p>
-        </div>
-      </div>
-      <p style="font-size: 0.75em;"><strong>Speed + Cheap</strong> = Lower quality<br>
-      <span style="color: #888;">(Haiku, Flash, small models)</span></p>
+    <div style="text-align: center;">
+      <svg viewBox="0 0 500 400" width="580" height="400" style="margin: 0 auto; display: block;">
+        <!-- Triangle -->
+        <polygon points="250,40 60,330 440,330"
+                 fill="none" stroke="#00d4ff" stroke-width="2.5" />
+
+        <!-- Edge labels (on the sides) -->
+        <text x="138" y="175" fill="#00ff88" font-size="15" font-weight="bold"
+              text-anchor="middle" transform="rotate(-58, 138, 175)">Quality + Speed</text>
+        <text x="362" y="175" fill="#ffcc00" font-size="15" font-weight="bold"
+              text-anchor="middle" transform="rotate(58, 362, 175)">Quality + Cheap</text>
+        <text x="250" y="365" fill="#ff6666" font-size="15" font-weight="bold"
+              text-anchor="middle">Speed + Cheap</text>
+
+        <!-- Edge descriptions -->
+        <text x="108" y="200" fill="#888" font-size="12"
+              text-anchor="middle" transform="rotate(-58, 108, 200)">= Expensive</text>
+        <text x="392" y="200" fill="#888" font-size="12"
+              text-anchor="middle" transform="rotate(58, 392, 200)">= Slow</text>
+        <text x="250" y="385" fill="#888" font-size="12"
+              text-anchor="middle">= Lower quality</text>
+
+        <!-- Corner labels -->
+        <text x="250" y="28" fill="#00d4ff" font-size="18" font-weight="bold"
+              text-anchor="middle">QUALITY</text>
+        <text x="40" y="355" fill="#00d4ff" font-size="18" font-weight="bold"
+              text-anchor="middle">SPEED</text>
+        <text x="460" y="355" fill="#00d4ff" font-size="18" font-weight="bold"
+              text-anchor="middle">COST</text>
+
+        <!-- Example models at corners -->
+        <text x="250" y="75" fill="#666" font-size="12" text-anchor="middle">Opus, GPT-5.4 Thinking</text>
+        <text x="60" y="310" fill="#666" font-size="12" text-anchor="middle">Haiku, Flash</text>
+        <text x="440" y="310" fill="#666" font-size="12" text-anchor="middle">Open source, mini</text>
+
+        <!-- Dots at vertices -->
+        <circle cx="250" cy="40" r="5" fill="#00d4ff" />
+        <circle cx="60" cy="330" r="5" fill="#00d4ff" />
+        <circle cx="440" cy="330" r="5" fill="#00d4ff" />
+      </svg>
     </div>
   </section>
 
