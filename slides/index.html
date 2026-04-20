@@ -840,31 +840,33 @@ prompts/
   </section>
 
   <section>
-    <h2>OpenAI Models</h2>
+    <h2>OpenAI Models (GPT-5 Family)</h2>
     <div style="font-size: 0.65em;">
       <table class="comparison-table">
         <tr><th>Model</th><th>Best For</th><th>Notes</th></tr>
         <tr>
-          <td><strong>GPT-4o</strong></td>
-          <td>General coding, multimodal (images)</td>
-          <td>Fast, good all-rounder</td>
+          <td><strong>GPT-5.4 Pro</strong></td>
+          <td>Maximum capability, complex coding</td>
+          <td>Flagship model, 1M context, includes Codex</td>
         </tr>
         <tr>
-          <td><strong>GPT-4.1</strong></td>
-          <td>Coding tasks, instruction following</td>
-          <td>Optimized for developer workflows</td>
+          <td><strong>GPT-5.4 Thinking</strong></td>
+          <td>Deep reasoning, hard bugs, architecture</td>
+          <td>Thinks step-by-step before responding</td>
         </tr>
         <tr>
-          <td><strong>o3</strong></td>
-          <td>Complex reasoning, math, hard bugs</td>
-          <td>"Thinking" model - slower but more thorough</td>
+          <td><strong>GPT-5.3 Instant</strong></td>
+          <td>Fast everyday tasks, general coding</td>
+          <td>Default model, auto-upgrades to Thinking when needed</td>
         </tr>
         <tr>
-          <td><strong>o4-mini</strong></td>
-          <td>Reasoning at lower cost</td>
-          <td>Good balance of thinking + speed</td>
+          <td><strong>GPT-5.4 mini</strong></td>
+          <td>High-volume, cost-efficient tasks</td>
+          <td>Best cost/performance ratio</td>
         </tr>
       </table>
+      <p style="margin-top: 0.5em; color: #888;">GPT-4o, GPT-4.1, o3, o4-mini were retired Feb 2026.
+      Codex is now built into GPT-5.4 Pro.</p>
     </div>
   </section>
 
@@ -916,7 +918,7 @@ prompts/
       <div class="two-column" style="font-size: 0.75em;">
         <div>
           <p><strong>Quality + Speed</strong> = Expensive<br>
-          <span style="color: #888;">(Opus, GPT-4.1)</span></p>
+          <span style="color: #888;">(Opus, GPT-5.4 Pro)</span></p>
         </div>
         <div>
           <p><strong>Quality + Cheap</strong> = Slow<br>
@@ -940,27 +942,27 @@ prompts/
         </tr>
         <tr>
           <td>Write a new function</td>
-          <td>Sonnet / GPT-4o</td>
+          <td>Sonnet / GPT-5.3 Instant</td>
           <td>Good balance</td>
         </tr>
         <tr>
           <td>Code review</td>
-          <td>Sonnet / GPT-4.1</td>
+          <td>Sonnet / GPT-5.3 Instant</td>
           <td>Needs understanding, not creativity</td>
         </tr>
         <tr>
           <td>Complex refactoring</td>
-          <td>Opus / GPT-4.1</td>
+          <td>Opus / GPT-5.4 Pro</td>
           <td>Multi-file awareness needed</td>
         </tr>
         <tr>
           <td>Debug a hard bug</td>
-          <td>Opus / o3</td>
+          <td>Opus / GPT-5.4 Thinking</td>
           <td>Deep reasoning required</td>
         </tr>
         <tr>
           <td>Explain code to me</td>
-          <td>Sonnet / GPT-4o</td>
+          <td>Sonnet / GPT-5.3 Instant</td>
           <td>Good enough, save money</td>
         </tr>
       </table>
