@@ -73,3 +73,35 @@ And Claude Code responded:
 ---
 
 The developer gave up and spent another 2 hours debugging on their own before finding the issue: a SQLAlchemy query in the `/api/orders` endpoint was missing a `.join()` call, so it was returning orders without their associated line items. The fix was a single line of code.
+
+---
+
+## Example 2: The Vague Prompt That Got a Wrong Fix
+
+Later, the same developer tried again -- this time with an AI agent that could read the project files directly. They gave it the same vague prompt:
+
+> Fix the bug in the API. The endpoint is returning the wrong data and my frontend team is blocked. This needs to be fixed ASAP.
+
+The AI explored the codebase, and within a minute it announced it had found the bug. It pointed to a comment in `routes/orders.py` that said:
+
+```python
+# NOTE: Previously used joinedload here but removed for performance - see ticket ORD-142
+```
+
+The AI added `joinedload(Order.line_items)` to the query in the route handler. The endpoint started returning line items. Bug fixed, right?
+
+**Not quite.** The *real* problem was in `models/order.py`, where the Order model's relationship was defined as:
+
+```python
+line_items = db.relationship("LineItem", backref="order", lazy="noload")
+```
+
+The `lazy="noload"` setting means line items are *never* loaded unless you explicitly ask for them. The AI's fix (adding `joinedload` to one query) was a band-aid -- it fixed the `/api/orders` endpoint, but every *other* place in the codebase that calls `order.to_dict()` would still get empty line items.
+
+The root cause fix was changing `lazy="noload"` to `lazy="select"` in the model definition -- a one-line change that fixes the problem everywhere.
+
+### Why did this happen?
+
+The AI had no context about *which* endpoint was broken or *what* "wrong data" meant. So it explored the whole codebase, got pulled toward the most suspicious-looking clue (a comment about removing `joinedload`), and applied a fix there. It found *a* fix, but not *the* fix.
+
+**The lesson:** Context doesn't just help the AI find bugs *faster* -- it helps it find the *right* fix. A specific prompt mentioning "the Order model's line_items relationship" would have pointed the AI straight to `models/order.py` instead of the red herring in the route handler.
