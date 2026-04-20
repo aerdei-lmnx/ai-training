@@ -44,9 +44,28 @@ Don't worry about making it perfect. The point is to practice the habit of gathe
 
 Open `solution.md` to see the full list of missing context and an example rewritten prompt.
 
-## Bonus
+## Part 5 - Try it for real (~5 minutes)
 
-If you have access to Claude Code, try running your rewritten prompt (or the example one from the solution) and compare the quality of the response to the broken interaction. The difference is usually dramatic.
+There is a **buggy Flask app** in the `buggy-orders-app/` directory. It has the exact bug from the broken interaction: the `/api/orders` endpoint returns orders with empty `line_items` arrays even though line item data exists in the database.
+
+### Setup
+
+```bash
+cd buggy-orders-app
+pip install -r requirements.txt
+python app.py
+```
+
+The server runs on `http://localhost:5001`. Open `http://localhost:5001/api/orders` in a browser to see the bug in action -- every order has `"line_items": []`.
+
+### Your task
+
+1. Open a **new terminal** in the `buggy-orders-app/` directory
+2. Start Claude Code: `claude`
+3. First, try the **bad prompt** from `broken_interaction.md`: "Fix the bug in the API"
+4. Clear the conversation: `/clear`
+5. Now try **your rewritten prompt** (or the example from `solution.md`)
+6. Compare the two responses -- the difference should be dramatic
 
 ## Key Takeaway
 
