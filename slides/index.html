@@ -117,19 +117,27 @@
 
   <section>
     <h2>Live Demo</h2>
-    <p style="font-size: 0.8em;">Watch: fixing a real bug with Claude Code in 2 minutes</p>
-    <pre><code class="language-bash">$ claude
-> There's a bug in app.py - the /books endpoint returns
-  a 500 error when the database is empty. Fix it and
-  add a test to prevent regression.</code></pre>
+    <p style="font-size: 0.8em;">Watch: fixing real bugs with Claude Code in 2 minutes</p>
+    <div style="font-size: 0.7em;">
+      <p><strong>1.</strong> Browser: <code>localhost:5002/books?in_stock=true</code> &rarr; empty list (bug!)</p>
+      <p><strong>2.</strong> Browser: <code>localhost:5002/books/stats</code> &rarr; 500 error (bug!)</p>
+      <p><strong>3.</strong> Terminal: <code>pytest -v</code> &rarr; 3 tests failing</p>
+    </div>
+    <pre class="fragment"><code class="language-bash">$ claude
+> The bookstore API has two bugs. GET /books?in_stock=true
+  returns an empty list even though there are books in stock.
+  GET /books/stats crashes with a 500 error when the database
+  is empty. Fix both bugs and make sure all tests pass.</code></pre>
     <div class="tip-box fragment" style="font-size: 0.7em;">
-      Notice: Claude reads the code, identifies the issue,
-      fixes it, writes a test, and runs it. All from one prompt.
+      Watch: Claude reads the code, finds both bugs, fixes them, runs tests.
+      All 12 tests green. Refresh the browser to confirm.
     </div>
     <aside class="notes">
-      LIVE DEMO: Use the exercise 3.1 Flask app. Intentionally break
-      something simple (like a None check) and have Claude fix it.
-      Show the full agent workflow: reading, planning, editing, testing.
+      LIVE DEMO: Use demos/module-1-live-demo/. See its README.md for the
+      full demo script. Setup: cd demos/module-1-live-demo && pip install -r
+      requirements.txt && python app.py (port 5002). Show the broken endpoints
+      in a browser first, then run pytest to show 3 failures, then let Claude
+      fix it. Reset after: git checkout -- app.py && rm -f instance/bookstore.db
     </aside>
   </section>
 </section>
