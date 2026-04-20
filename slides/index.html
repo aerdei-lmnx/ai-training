@@ -120,14 +120,14 @@
     <p style="font-size: 0.8em;">Watch: fixing real bugs with Claude Code in 2 minutes</p>
     <div style="font-size: 0.7em;">
       <p><strong>1.</strong> Browser: <code>localhost:5002/books?in_stock=true</code> &rarr; empty list (bug!)</p>
-      <p><strong>2.</strong> Browser: <code>localhost:5002/books/stats</code> &rarr; 500 error (bug!)</p>
+      <p><strong>2.</strong> Browser: <code>localhost:5002/books/stats</code> &rarr; wrong counts (bug!)</p>
       <p><strong>3.</strong> Terminal: <code>pytest -v</code> &rarr; 3 tests failing</p>
     </div>
     <pre class="fragment"><code class="language-bash">$ claude
 > The bookstore API has two bugs. GET /books?in_stock=true
   returns an empty list even though there are books in stock.
-  GET /books/stats crashes with a 500 error when the database
-  is empty. Fix both bugs and make sure all tests pass.</code></pre>
+  GET /books/stats reports wrong counts - says 1 in stock but
+  there are 2. Fix both bugs and make sure all tests pass.</code></pre>
     <div class="tip-box fragment" style="font-size: 0.7em;">
       Watch: Claude reads the code, finds both bugs, fixes them, runs tests.
       All 12 tests green. Refresh the browser to confirm.

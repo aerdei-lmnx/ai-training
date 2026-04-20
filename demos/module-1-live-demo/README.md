@@ -11,8 +11,6 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The server runs on `http://localhost:5002`.
-
 ## Demo Script
 
 ### Step 1: Show the app works (30 seconds)
@@ -28,7 +26,7 @@ Open a browser and show these working endpoints:
 Now show the broken parts:
 
 - `http://localhost:5002/books?in_stock=true` -- **returns empty array** even though 2 books are in stock. The filter is broken.
-- `http://localhost:5002/books/stats` -- **500 Internal Server Error** when DB is empty (or show the test failure)
+- `http://localhost:5002/books/stats` -- **says `in_stock: 1, out_of_stock: 2`** but we just saw 2 books are in stock and only 1 is out. The counts are swapped!
 
 Then run the tests to make the failures visible:
 
@@ -48,7 +46,7 @@ claude
 
 Prompt:
 
-> The bookstore API has two bugs. First, GET /books?in_stock=true returns an empty list even though there are books in stock. Second, GET /books/stats crashes with a 500 error when the database is empty. Fix both bugs and make sure all tests pass.
+> The bookstore API has two bugs. First, GET /books?in_stock=true returns an empty list even though there are books in stock. Second, GET /books/stats reports the wrong counts -- it says 1 book is in stock but there are actually 2. Fix both bugs and make sure all tests pass.
 
 Let the audience watch Claude Code read the files, find both bugs, and fix them.
 
@@ -73,9 +71,9 @@ Key points to make:
 
 `request.args.get("in_stock")` returns the string `"true"`, but `filter_by(in_stock="true")` compares against a boolean column. The string never matches, so zero results come back.
 
-**Bug 2: Division by zero in stats** (`app.py` around line 152)
+**Bug 2: Swapped filter in stats** (`app.py` around line 148)
 
-`avg_price = sum(prices) / len(prices)` crashes when the books table is empty because `len(prices)` is 0.
+`in_stock = Book.query.filter_by(in_stock=False).count()` filters for `False` instead of `True`, so the in_stock and out_of_stock counts are swapped.
 
 ## Resetting for the demo
 

@@ -145,11 +145,11 @@ def register_routes(app):
     def book_stats():
         """Get bookstore statistics."""
         total = Book.query.count()
-        in_stock = Book.query.filter_by(in_stock=True).count()
+        in_stock = Book.query.filter_by(in_stock=False).count()
         out_of_stock = total - in_stock
 
         prices = [b.price for b in Book.query.all()]
-        avg_price = sum(prices) / len(prices)
+        avg_price = sum(prices) / len(prices) if prices else 0
 
         return jsonify({
             "data": {
