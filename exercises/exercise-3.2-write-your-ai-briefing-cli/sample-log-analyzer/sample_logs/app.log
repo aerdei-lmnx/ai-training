@@ -1,0 +1,52 @@
+2026-04-15T08:00:01Z INFO [scheduler] Scheduler started, polling interval 60s
+2026-04-15T08:00:01Z INFO [db] Connection pool initialized, max_connections=10
+2026-04-15T08:00:02Z DEBUG [cache] Cache warmed: 342 keys loaded from snapshot
+2026-04-15T08:00:05Z INFO [api] Server listening on 0.0.0.0:8080
+2026-04-15T08:01:12Z INFO [auth] User jdoe authenticated via API key
+2026-04-15T08:03:45Z DEBUG [api] GET /api/v1/status 200 12ms
+2026-04-15T08:05:33Z INFO [auth] User svc-deploy authenticated via mTLS
+2026-04-15T08:07:18Z WARN [db] Slow query detected: SELECT * FROM events WHERE ts > ? (1423ms)
+2026-04-15T08:10:01Z INFO [scheduler] Running job: cleanup_expired_sessions
+2026-04-15T08:10:04Z DEBUG [db] DELETE FROM sessions WHERE expires_at < '2026-04-15T08:10:01Z' (rows_affected=17)
+2026-04-15T08:12:55Z INFO [api] GET /api/v1/users 200 45ms
+2026-04-15T08:15:22Z ERROR [auth] Failed login for user admin from 192.168.1.50
+2026-04-15T08:15:44Z ERROR [auth] Failed login for user admin from 192.168.1.50
+2026-04-15T08:16:01Z ERROR [auth] Failed login for user admin from 192.168.1.50
+2026-04-15T08:16:18Z WARN [auth] Rate limit triggered for 192.168.1.50 (3 failures in 60s)
+2026-04-15T08:20:00Z INFO [scheduler] Running job: sync_external_inventory
+2026-04-15T08:20:03Z DEBUG [api] POST /api/v1/inventory/sync 202 8ms
+2026-04-15T08:20:15Z INFO [db] Bulk insert: 150 inventory records written
+2026-04-15T08:25:33Z WARN [cache] Cache miss ratio above threshold: 34% (limit 25%)
+2026-04-15T08:30:00Z INFO [scheduler] Running job: generate_hourly_report
+2026-04-15T08:30:02Z DEBUG [db] Aggregate query completed in 312ms
+2026-04-15T08:30:05Z INFO [api] Report generated: /reports/hourly/2026-04-15T08.json
+2026-04-15T08:35:12Z ERROR [db] Connection timeout after 5000ms reaching replica-2.db.internal
+2026-04-15T08:35:13Z WARN [db] Falling back to primary for read queries
+2026-04-15T08:35:14Z INFO [db] Reconnection attempt 1/3 to replica-2.db.internal
+2026-04-15T08:35:19Z INFO [db] Reconnection attempt 2/3 to replica-2.db.internal
+2026-04-15T08:35:24Z INFO [db] Reconnection attempt 3/3 to replica-2.db.internal
+2026-04-15T08:35:25Z ERROR [db] Failed to reconnect to replica-2.db.internal after 3 attempts
+2026-04-15T08:35:25Z WARN [db] Replica replica-2.db.internal removed from pool, operating in degraded mode
+2026-04-15T08:40:01Z INFO [scheduler] Running job: cleanup_expired_sessions
+2026-04-15T08:40:03Z DEBUG [db] DELETE FROM sessions WHERE expires_at < '2026-04-15T08:40:01Z' (rows_affected=5)
+2026-04-15T08:45:10Z INFO [auth] User jdoe authenticated via API key
+2026-04-15T08:47:22Z DEBUG [api] GET /api/v1/inventory?page=2&per_page=50 200 67ms
+2026-04-15T08:50:00Z INFO [scheduler] Running job: health_check_replicas
+2026-04-15T08:50:02Z INFO [db] Health check: primary OK, replica-1 OK, replica-2 UNREACHABLE
+2026-04-15T08:50:03Z WARN [scheduler] Health check flagged 1 unreachable replica
+2026-04-15T08:55:30Z ERROR [auth] Failed login for user admin from 10.0.0.203
+2026-04-15T08:58:11Z INFO [api] GET /api/v1/reports/hourly/2026-04-15T08.json 200 23ms
+2026-04-15T09:00:00Z INFO [scheduler] Running job: sync_external_inventory
+2026-04-15T09:00:04Z ERROR [api] Upstream timeout: inventory service did not respond within 3000ms
+2026-04-15T09:00:04Z WARN [scheduler] Job sync_external_inventory failed, will retry in 300s
+2026-04-15T09:05:17Z INFO [auth] User ops-bot authenticated via API key
+2026-04-15T09:07:44Z DEBUG [cache] Evicted 89 stale keys (TTL expired)
+2026-04-15T09:10:00Z INFO [scheduler] Running job: cleanup_expired_sessions
+2026-04-15T09:10:02Z DEBUG [db] DELETE FROM sessions WHERE expires_at < '2026-04-15T09:10:00Z' (rows_affected=3)
+2026-04-15T09:15:33Z FATAL [scheduler] Unhandled exception in job generate_daily_digest: RuntimeError: template 'daily_digest.html' not found
+2026-04-15T09:15:33Z ERROR [scheduler] Job generate_daily_digest terminated abnormally, disabling until manual review
+2026-04-15T09:15:34Z INFO [api] POST /api/v1/alerts 201 15ms (alert_type=job_failure)
+2026-04-15T09:20:05Z INFO [cache] Cache snapshot saved: 298 keys written to disk
+2026-04-15T09:25:00Z INFO [scheduler] Running job: health_check_replicas
+2026-04-15T09:25:02Z INFO [db] Health check: primary OK, replica-1 OK, replica-2 OK (recovered)
+2026-04-15T09:25:03Z INFO [db] Replica replica-2.db.internal re-added to pool
