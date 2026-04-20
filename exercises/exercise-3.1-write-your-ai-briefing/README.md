@@ -36,16 +36,18 @@ Take notes on anything a newcomer would need to know.
 
 ### Step 2 -- Write a CLAUDE.md (~10 minutes)
 
-Create a file called `sample-flask-app/CLAUDE.md`. Write it from scratch -- do not look at the solution yet.
+Create a file called `sample-flask-app/CLAUDE.md`. Choose your difficulty level:
 
-Your CLAUDE.md should cover:
+**Bronze (recommended for first-timers):**
+Copy `template-claude-md.md` into `sample-flask-app/CLAUDE.md` and fill in the blanks. The template has section headers and guiding questions -- just answer them based on what you saw in Step 1.
 
-1. **Project overview** -- What is this project? What does it do?
-2. **Tech stack** -- What frameworks and tools does it use?
-3. **Conventions** -- What patterns must new code follow?
-4. **How to run** -- How do you install, start, and test the app?
-5. **File structure** -- Where does everything live?
-6. **Common commands** -- What does a developer type day-to-day?
+**Silver:**
+Start from the template, fill it in, then add one extra section of your own (e.g. pagination details, testing patterns, or anything else you noticed).
+
+**Gold:**
+Write it from scratch with no template. Cover whatever you think matters.
+
+No matter which level you pick, focus on **conventions Claude would get wrong without being told** -- things like response format, date handling, and naming patterns.
 
 Hint: Think about what you would tell a new developer on their first day. What would they get wrong without being told?
 
