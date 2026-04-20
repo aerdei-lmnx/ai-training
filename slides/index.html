@@ -1,0 +1,1551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Assisted Development - Training Course</title>
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/reveal.css">
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/theme/black.css">
+  <link rel="stylesheet" href="node_modules/reveal.js/dist/plugin/highlight/monokai.css">
+  <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============================================================ -->
+<!-- MODULE 1: INTRO TO AI-ASSISTED DEVELOPMENT                   -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 1</div>
+    <h1>AI-Assisted Development</h1>
+    <p class="subtitle">A Practical Guide for Developers</p>
+    <br>
+    <p style="font-size: 0.6em; color: #666;">Full-Day Training Course</p>
+    <aside class="notes">
+      Welcome everyone. Today we'll transform how you write code.
+      By end of day, you'll have hands-on experience with AI coding tools
+      and a toolkit of techniques you can use immediately.
+    </aside>
+  </section>
+
+  <section>
+    <h2>What We'll Cover Today</h2>
+    <ol style="font-size: 0.75em;">
+      <li><strong>The Blank Slate</strong> &mdash; How AI context works</li>
+      <li><strong>CLAUDE.md &amp; Config</strong> &mdash; Persistent AI instructions</li>
+      <li><strong>Prompt Engineering</strong> &mdash; Talking to machines effectively</li>
+      <li><strong>Models</strong> &mdash; Choosing the right AI for the job</li>
+      <li><strong>Claude Code</strong> &mdash; CLI deep dive</li>
+      <li><strong>GitHub Copilot</strong> &mdash; Your AI pair programmer</li>
+    </ol>
+    <aside class="notes">
+      Quick overview of the day. Morning is concepts, afternoon is tools.
+      Lots of hands-on exercises throughout.
+    </aside>
+  </section>
+
+  <section>
+    <h2>What is an LLM?</h2>
+    <p style="font-size: 0.8em;">Large Language Model &mdash; in plain English:</p>
+    <div class="highlight-box">
+      <p>A program that has read most of the internet and learned to predict
+      "what text comes next" so well that it can write code, explain concepts,
+      and solve problems.</p>
+    </div>
+    <p class="fragment" style="font-size: 0.7em;">It doesn't "think" like you do.
+    It's incredibly good at pattern matching and generation.</p>
+    <aside class="notes">
+      No ML theory here. The key insight: LLMs are trained on massive text data
+      and generate responses one token at a time. They're statistical but
+      remarkably capable.
+    </aside>
+  </section>
+
+  <section>
+    <h2>The AI Landscape</h2>
+    <div class="two-column" style="font-size: 0.7em;">
+      <div>
+        <h3>Copilots</h3>
+        <p>Autocomplete on steroids.<br>
+        Suggest code as you type.<br>
+        <em>Example: GitHub Copilot</em></p>
+      </div>
+      <div>
+        <h3>Agents</h3>
+        <p>Autonomous problem-solvers.<br>
+        Read files, run commands, edit code.<br>
+        <em>Example: Claude Code</em></p>
+      </div>
+    </div>
+    <div class="fragment highlight-box" style="font-size: 0.7em; margin-top: 1em;">
+      <strong>Key difference:</strong> Copilots assist while you drive.
+      Agents can drive while you supervise.
+    </div>
+    <aside class="notes">
+      Copilots = reactive, inline suggestions. Agents = proactive, can take
+      multi-step actions. Both are useful, different situations.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Our Tools Today</h2>
+    <div class="two-column" style="font-size: 0.7em;">
+      <div>
+        <h3>Claude Code (CLI)</h3>
+        <ul>
+          <li>Terminal-based AI agent</li>
+          <li>Reads your codebase</li>
+          <li>Edits files directly</li>
+          <li>Runs tests &amp; commands</li>
+          <li>Plans before acting</li>
+        </ul>
+      </div>
+      <div>
+        <h3>GitHub Copilot</h3>
+        <ul>
+          <li>IDE extension (VS Code)</li>
+          <li>Inline code suggestions</li>
+          <li>Chat panel for questions</li>
+          <li>Tab to accept completions</li>
+          <li>Context from open files</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Live Demo</h2>
+    <p style="font-size: 0.8em;">Watch: fixing a real bug with Claude Code in 2 minutes</p>
+    <pre><code class="language-bash">$ claude
+> There's a bug in app.py - the /books endpoint returns
+  a 500 error when the database is empty. Fix it and
+  add a test to prevent regression.</code></pre>
+    <div class="tip-box fragment" style="font-size: 0.7em;">
+      Notice: Claude reads the code, identifies the issue,
+      fixes it, writes a test, and runs it. All from one prompt.
+    </div>
+    <aside class="notes">
+      LIVE DEMO: Use the exercise 3.1 Flask app. Intentionally break
+      something simple (like a None check) and have Claude fix it.
+      Show the full agent workflow: reading, planning, editing, testing.
+    </aside>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 2: THE BLANK SLATE - UNDERSTANDING CONTEXT            -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 2</div>
+    <h1>The Blank Slate</h1>
+    <p class="subtitle">Understanding Context</p>
+    <aside class="notes">
+      This is the MOST important concept in the entire course.
+      If they understand nothing else, they need to understand context.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Every conversation starts at zero</h2>
+    <div class="highlight-box">
+      <p>When you start a new AI conversation, the model knows
+      <strong>nothing</strong> about your project, your code, your conventions,
+      or your problem.</p>
+    </div>
+    <p class="fragment" style="font-size: 0.8em;">
+      It's like hiring a brilliant contractor who shows up every morning
+      with total amnesia.
+    </p>
+    <aside class="notes">
+      This is the #1 mistake beginners make. They assume the AI
+      "knows" their project. It doesn't. The contractor analogy
+      really drives this home.
+    </aside>
+  </section>
+
+  <section>
+    <h2>What is a Context Window?</h2>
+    <div style="font-size: 0.75em;">
+      <p>The context window is the AI's <strong>short-term memory</strong>
+      &mdash; everything it can "see" during a conversation.</p>
+      <br>
+      <table class="comparison-table">
+        <tr><th>Model</th><th>Context Window</th><th>Roughly...</th></tr>
+        <tr><td>Claude Sonnet 4.6</td><td>200K tokens</td><td>~500 pages of code</td></tr>
+        <tr><td>GPT-4o</td><td>128K tokens</td><td>~320 pages of code</td></tr>
+        <tr><td>Claude Haiku 4.5</td><td>200K tokens</td><td>~500 pages of code</td></tr>
+        <tr><td>Gemini 2.5 Pro</td><td>1M tokens</td><td>~2,500 pages of code</td></tr>
+      </table>
+      <p class="fragment" style="margin-top: 0.5em; color: #ff6666;">
+        Bigger isn't always better &mdash; more context = slower + more expensive
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>What Goes Into the Context?</h2>
+    <div style="font-size: 0.7em; text-align: left;">
+      <p><strong>1. System prompt</strong> &mdash; Hidden instructions (tool rules, safety guidelines)</p>
+      <p><strong>2. CLAUDE.md / config files</strong> &mdash; Your project instructions</p>
+      <p><strong>3. Conversation history</strong> &mdash; Everything you've said + AI responses</p>
+      <p><strong>4. Files read</strong> &mdash; Code the AI has opened and examined</p>
+      <p><strong>5. Tool results</strong> &mdash; Output from searches, commands, tests</p>
+    </div>
+    <div class="warning-box fragment" style="font-size: 0.65em; margin-top: 0.5em;">
+      When the window fills up, oldest content gets <strong>compacted</strong>
+      (summarized or dropped). Information can be lost!
+    </div>
+    <aside class="notes">
+      Draw this as a bucket that fills up. When it overflows, stuff gets
+      pushed out. This is why long conversations degrade.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Context: Claude Code vs Copilot</h2>
+    <div class="two-column" style="font-size: 0.65em;">
+      <div>
+        <h3>Claude Code</h3>
+        <ul>
+          <li>Reads CLAUDE.md at startup</li>
+          <li>Searches your codebase (grep, glob)</li>
+          <li>Opens files as needed</li>
+          <li>Sees git history</li>
+          <li>Runs commands, reads output</li>
+          <li>You control: what to share</li>
+        </ul>
+      </div>
+      <div>
+        <h3>GitHub Copilot</h3>
+        <ul>
+          <li>Sees the current file</li>
+          <li>Sees open tabs in your IDE</li>
+          <li>Reads neighboring files</li>
+          <li>Reads .github/copilot-instructions.md</li>
+          <li>Automatic: IDE decides what to send</li>
+          <li>Less control, but less effort</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">
+      Key insight: Claude Code = explicit context (you guide it).
+      Copilot = implicit context (IDE sends what it thinks is relevant).
+      Both benefit from good project structure.
+    </aside>
+  </section>
+
+  <section>
+    <h2>The Contractor Analogy</h2>
+    <p style="font-size: 0.8em;">Before asking for help, give the AI what you'd give a new team member:</p>
+    <div style="font-size: 0.7em; text-align: left;">
+      <p class="fragment">1. <strong>What project is this?</strong> &mdash; "A Flask REST API for a bookstore"</p>
+      <p class="fragment">2. <strong>What's the tech stack?</strong> &mdash; "Python 3.11, SQLAlchemy, PostgreSQL"</p>
+      <p class="fragment">3. <strong>What are the conventions?</strong> &mdash; "snake_case, ISO dates, wrapped responses"</p>
+      <p class="fragment">4. <strong>What's the specific problem?</strong> &mdash; "GET /books returns 500 when DB is empty"</p>
+      <p class="fragment">5. <strong>What does the error look like?</strong> &mdash; The actual traceback</p>
+    </div>
+    <aside class="notes">
+      Walk through each of these. Ask the audience: "What else would you
+      tell a new contractor on day 1?" Write answers on a whiteboard.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Demo: Context Matters</h2>
+    <div class="two-column" style="font-size: 0.65em;">
+      <div>
+        <h3 style="color: #ff6666;">Bad Prompt</h3>
+        <pre><code class="language-text">Fix the bug in the API</code></pre>
+        <p>AI response: Generic advice about common API bugs,
+        doesn't know your code, can't help.</p>
+      </div>
+      <div>
+        <h3 style="color: #00ff88;">Good Prompt</h3>
+        <pre><code class="language-text">In app.py, the GET /books endpoint
+raises TypeError: 'NoneType' is not
+iterable when the books table is empty.
+The query returns None instead of [].
+Fix this and add a test.</code></pre>
+        <p>AI response: Reads app.py, finds the exact line, fixes it,
+        writes a targeted test.</p>
+      </div>
+    </div>
+    <aside class="notes">
+      LIVE DEMO: Run both prompts. The contrast should be dramatic.
+    </aside>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 2.1: Context Detective</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-2.1-context-detective/</code></p>
+      <br>
+      <ol>
+        <li>Read the broken AI interaction in <code>broken_interaction.md</code></li>
+        <li>Identify at least 3 pieces of missing context</li>
+        <li>Rewrite the prompt with proper context</li>
+        <li><strong>Bonus:</strong> Try your improved prompt in Claude Code</li>
+      </ol>
+      <br>
+      <p><strong>Time: 20 minutes</strong></p>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 3: CLAUDE.MD & CONFIG FILES                           -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 3</div>
+    <h1>Your Project's README for AI</h1>
+    <p class="subtitle">CLAUDE.md &amp; Config Files</p>
+  </section>
+
+  <section>
+    <h2>The Problem</h2>
+    <div class="highlight-box">
+      <p>You shouldn't have to re-explain your project conventions
+      every single conversation.</p>
+    </div>
+    <p class="fragment" style="font-size: 0.8em;">
+      Solution: Write it down once. The AI reads it automatically.
+    </p>
+  </section>
+
+  <section>
+    <h2>What is CLAUDE.md?</h2>
+    <div style="font-size: 0.75em;">
+      <p>A markdown file that Claude Code reads <strong>at the start of every conversation</strong>.</p>
+      <br>
+      <p>Think of it as:</p>
+      <ul>
+        <li>An onboarding doc for your AI assistant</li>
+        <li>A project README, but for the AI</li>
+        <li>Persistent memory across conversations</li>
+      </ul>
+      <br>
+      <div class="tip-box">
+        It goes into the context window automatically &mdash; no need to paste it every time.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>CLAUDE.md Hierarchy</h2>
+    <div style="font-size: 0.7em; text-align: left;">
+      <p><strong>~/.claude/CLAUDE.md</strong> &mdash; Global (all projects)</p>
+      <p style="color: #888; margin-left: 1em;">Your personal preferences, coding style</p>
+      <br>
+      <p><strong>./CLAUDE.md</strong> &mdash; Project root (this repo)</p>
+      <p style="color: #888; margin-left: 1em;">Project overview, tech stack, conventions</p>
+      <br>
+      <p><strong>./src/CLAUDE.md</strong> &mdash; Directory-level (this folder)</p>
+      <p style="color: #888; margin-left: 1em;">Module-specific notes, patterns</p>
+    </div>
+    <div class="fragment highlight-box" style="font-size: 0.65em; margin-top: 0.5em;">
+      All three are loaded. More specific files can add detail for subfolders.
+    </div>
+  </section>
+
+  <section>
+    <h2>Anatomy of a Good CLAUDE.md</h2>
+    <pre><code class="language-markdown" data-trim>
+# Bookstore API
+
+## Overview
+Flask REST API for managing a bookstore inventory.
+Python 3.11, SQLAlchemy ORM, SQLite (dev) / PostgreSQL (prod).
+
+## Conventions
+- All endpoints use snake_case
+- Dates are ISO 8601 format
+- All responses: {"data": ..., "error": null}
+- HTTP status codes: 200, 201, 400, 404, 500
+
+## Commands
+- Run: `flask run --debug`
+- Test: `pytest -v`
+- Lint: `ruff check .`
+
+## Structure
+- app.py - Routes and app factory
+- models.py - SQLAlchemy models
+- tests/ - Pytest test files
+    </code></pre>
+    <aside class="notes">
+      Walk through each section. Emphasize: concise, factual, actionable.
+      Don't write an essay. Think "what would a new developer need?"
+    </aside>
+  </section>
+
+  <section>
+    <h2>What to Include</h2>
+    <div class="two-column" style="font-size: 0.65em;">
+      <div>
+        <h3 style="color: #00ff88;">Do Include</h3>
+        <ul>
+          <li>Project purpose (1-2 sentences)</li>
+          <li>Tech stack and versions</li>
+          <li>How to run, test, deploy</li>
+          <li>Naming conventions</li>
+          <li>Response/API formats</li>
+          <li>File structure overview</li>
+          <li>Non-obvious constraints</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color: #ff6666;">Don't Include</h3>
+        <ul>
+          <li>Entire API documentation</li>
+          <li>Full code examples</li>
+          <li>Meeting notes or history</li>
+          <li>Things derivable from code</li>
+          <li>Secrets or credentials</li>
+          <li>Overly long instructions</li>
+          <li>Contradictory rules</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warning-box fragment" style="font-size: 0.65em;">
+      Remember: CLAUDE.md eats context window space.
+      Every word counts. Be concise.
+    </div>
+  </section>
+
+  <section>
+    <h2>The Copilot Equivalent</h2>
+    <pre><code class="language-markdown" data-trim>
+# .github/copilot-instructions.md
+
+You are assisting with a Python Flask REST API.
+Use snake_case for all identifiers.
+Always include type hints.
+Use pytest for testing.
+Wrap responses in {"data": ..., "error": ...} format.
+    </code></pre>
+    <p style="font-size: 0.7em;">
+      GitHub Copilot reads this file for project-wide instructions.<br>
+      Same idea, different file name.
+    </p>
+  </section>
+
+  <section>
+    <h2>Demo: Before &amp; After</h2>
+    <div style="font-size: 0.7em;">
+      <p>Same request, same project, with and without CLAUDE.md:</p>
+      <br>
+      <pre><code class="language-text">> Add a PUT /books/&lt;id&gt; endpoint for updating a book</code></pre>
+      <br>
+      <div class="two-column" style="font-size: 0.9em;">
+        <div>
+          <h3 style="color: #ff6666;">Without CLAUDE.md</h3>
+          <p>Generic Flask endpoint.<br>
+          Wrong response format.<br>
+          No tests.<br>
+          camelCase naming.</p>
+        </div>
+        <div>
+          <h3 style="color: #00ff88;">With CLAUDE.md</h3>
+          <p>Matches existing patterns.<br>
+          Correct response wrapper.<br>
+          Includes pytest tests.<br>
+          snake_case everywhere.</p>
+        </div>
+      </div>
+    </div>
+    <aside class="notes">
+      LIVE DEMO: Use the exercise 3.1 Flask app. First ask without
+      CLAUDE.md, then add it and ask again. Show the dramatic difference.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Quick Start: /init</h2>
+    <div style="font-size: 0.75em;">
+      <p>Claude Code can generate a CLAUDE.md for you:</p>
+      <pre><code class="language-bash">$ claude
+> /init</code></pre>
+      <p class="fragment">It scans your project and creates a starter CLAUDE.md.<br>
+      <strong>Always review and customize it</strong> &mdash; you know your project better than it does.</p>
+    </div>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 3.1: Write Your AI Briefing</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-3.1-write-your-ai-briefing/</code></p>
+      <br>
+      <ol>
+        <li>Explore the sample Flask app</li>
+        <li>Write a CLAUDE.md from scratch</li>
+        <li>Ask Claude Code: "Add a PUT /books/&lt;id&gt; endpoint"</li>
+        <li>Evaluate: Did it follow your conventions?</li>
+      </ol>
+      <br>
+      <p><strong>Time: 25 minutes</strong></p>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 4: PROMPT ENGINEERING                                  -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 4</div>
+    <h1>Talking to Machines</h1>
+    <p class="subtitle">Prompt Engineering for Developers</p>
+  </section>
+
+  <section>
+    <h2>Why Prompts Matter</h2>
+    <div class="highlight-box" style="font-size: 0.8em;">
+      <p>The quality of AI output is directly proportional
+      to the quality of your input.</p>
+    </div>
+    <p class="fragment" style="font-size: 0.75em;">
+      A vague prompt gets a vague answer.<br>
+      A specific prompt gets a specific, useful answer.
+    </p>
+  </section>
+
+  <section>
+    <h2>Anatomy of a Good Prompt</h2>
+    <div style="font-size: 0.7em; text-align: left;">
+      <p><strong>1. Task</strong> &mdash; What do you want? (be specific)</p>
+      <p><strong>2. Context</strong> &mdash; What should the AI know? (tech stack, constraints)</p>
+      <p><strong>3. Constraints</strong> &mdash; What should the AI NOT do? (boundaries)</p>
+      <p><strong>4. Output format</strong> &mdash; How should the answer look? (code, explanation, list)</p>
+    </div>
+    <pre class="fragment"><code class="language-text" data-trim>
+Task:       Add retry logic to the database connection in db.py
+Context:    We use SQLAlchemy with PostgreSQL. Connection drops
+            happen ~2x/day in production.
+Constraints: Max 3 retries, exponential backoff, don't change
+            the public API of get_connection().
+Format:     Just the code changes, no explanation needed.
+    </code></pre>
+  </section>
+
+  <section>
+    <h2>Pattern: Be Specific</h2>
+    <div class="two-column" style="font-size: 0.65em;">
+      <div>
+        <h3 style="color: #ff6666;">Vague</h3>
+        <pre><code class="language-text">Add error handling</code></pre>
+        <pre><code class="language-text">Make this better</code></pre>
+        <pre><code class="language-text">Fix the tests</code></pre>
+      </div>
+      <div>
+        <h3 style="color: #00ff88;">Specific</h3>
+        <pre><code class="language-text">Add try/except around the DB
+call in get_user() that catches
+ConnectionError and retries 3x</code></pre>
+        <pre><code class="language-text">Refactor parse_csv() to use
+pandas instead of manual string
+splitting, keep the same return type</code></pre>
+        <pre><code class="language-text">test_create_book fails with
+"IntegrityError: NOT NULL" -
+the test isn't setting the isbn field</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pattern: Step-by-Step Decomposition</h2>
+    <div style="font-size: 0.7em;">
+      <p>For complex tasks, break them into steps:</p>
+      <pre><code class="language-text" data-trim>
+I need to add user authentication to the Flask app. Let's do this
+step by step:
+
+1. First, add a User model to models.py with email, password_hash,
+   and created_at fields
+2. Add a POST /register endpoint that creates a user with a hashed
+   password (use werkzeug.security)
+3. Add a POST /login endpoint that returns a JWT token
+4. Add a @require_auth decorator that validates the JWT
+5. Add tests for all three endpoints
+
+Start with step 1 and let me review before moving on.
+      </code></pre>
+    </div>
+    <aside class="notes">
+      This is great for complex tasks. You maintain control,
+      can course-correct between steps, and get better results.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Pattern: Negative Constraints</h2>
+    <div style="font-size: 0.75em;">
+      <p>Tell the AI what <strong>not</strong> to do:</p>
+      <pre><code class="language-text" data-trim>
+Refactor the data processing pipeline in pipeline.py.
+
+DO NOT:
+- Change any function signatures (other code depends on them)
+- Add new dependencies
+- Modify the output format
+- Touch the logging configuration
+
+DO:
+- Extract the repeated try/except blocks into a decorator
+- Replace magic numbers with named constants
+- Add type hints to all functions
+      </code></pre>
+    </div>
+    <div class="tip-box fragment" style="font-size: 0.65em;">
+      Negative constraints prevent the AI from "helping" in ways you don't want.
+    </div>
+  </section>
+
+  <section>
+    <h2>Pattern: Few-Shot Examples</h2>
+    <div style="font-size: 0.7em;">
+      <p>Show the AI what you want by example:</p>
+      <pre><code class="language-text" data-trim>
+Convert these function docstrings to Google style. Here's the
+pattern I want:
+
+BEFORE:
+  def add(a, b):
+      """Adds two numbers and returns the result."""
+
+AFTER:
+  def add(a: int, b: int) -> int:
+      """Add two numbers.
+
+      Args:
+          a: First number.
+          b: Second number.
+
+      Returns:
+          The sum of a and b.
+      """
+
+Now apply this pattern to all functions in utils.py.
+      </code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>Reusable Prompt Templates</h2>
+    <div style="font-size: 0.75em;">
+      <p>Save your best prompts as <code>.md</code> files:</p>
+      <pre><code class="language-text" data-trim>
+prompts/
+  code-review.md
+  bug-investigation.md
+  refactoring.md
+  new-endpoint.md
+      </code></pre>
+      <p class="fragment">Then paste or reference them when needed.<br>
+      Build a team library of proven prompts.</p>
+      <div class="tip-box fragment">
+        In Claude Code, you can reference files directly:<br>
+        <code>&gt; Review this code following the guidelines in prompts/code-review.md</code>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Iterative Prompting</h2>
+    <div style="font-size: 0.7em;">
+      <p>When the first answer isn't right, don't start over &mdash; refine:</p>
+      <br>
+      <p><strong>Round 1:</strong> "Add input validation to the create_book endpoint"</p>
+      <p style="color: #888;">AI adds basic validation but misses ISBN format</p>
+      <br>
+      <p><strong>Round 2:</strong> "Good, but also validate that ISBN matches the
+      ISBN-13 format (13 digits, starts with 978 or 979)"</p>
+      <p style="color: #888;">AI adds ISBN validation</p>
+      <br>
+      <p><strong>Round 3:</strong> "Now add a test for each validation rule"</p>
+    </div>
+    <div class="highlight-box fragment" style="font-size: 0.65em;">
+      Each round builds on the conversation context. The AI remembers
+      what it did in previous rounds.
+    </div>
+  </section>
+
+  <section>
+    <h2>Common Anti-Patterns</h2>
+    <div style="font-size: 0.7em;">
+      <table class="comparison-table">
+        <tr><th>Anti-Pattern</th><th>Problem</th><th>Fix</th></tr>
+        <tr>
+          <td>Too vague</td>
+          <td>"Make it better"</td>
+          <td>Define "better": faster? more readable? fewer bugs?</td>
+        </tr>
+        <tr>
+          <td>Too long</td>
+          <td>2-page prompt with every detail</td>
+          <td>Focus on what's needed for THIS task</td>
+        </tr>
+        <tr>
+          <td>Contradictory</td>
+          <td>"Keep it simple but handle every edge case"</td>
+          <td>Prioritize: which matters more?</td>
+        </tr>
+        <tr>
+          <td>No acceptance criteria</td>
+          <td>"Add a feature" (when is it done?)</td>
+          <td>Define what success looks like</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 4.1: Prompt Battle</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-4.1-prompt-battle/</code></p>
+      <br>
+      <ol>
+        <li>Pair up with a neighbor</li>
+        <li>Both pick the same coding task from <code>coding-tasks.md</code></li>
+        <li>Each person writes a prompt independently</li>
+        <li>Run both prompts in Claude Code</li>
+        <li>Class votes: whose output is better?</li>
+      </ol>
+      <br>
+      <p><strong>Time: 20 minutes</strong></p>
+    </div>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 4.2: Build Your Toolkit</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-4.2-build-your-toolkit/</code></p>
+      <br>
+      <ol>
+        <li>Review the starter templates in <code>templates/</code></li>
+        <li>Fill in the TODOs for your team's Python stack</li>
+        <li>Create one new template for a task YOU do often</li>
+        <li>Test one template with Claude Code</li>
+      </ol>
+      <br>
+      <p><strong>Time: 20 minutes</strong></p>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- LUNCH BREAK                                                   -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <h1>Lunch Break</h1>
+    <p class="subtitle">Back in 1 hour</p>
+    <br>
+    <div class="tip-box" style="font-size: 0.7em;">
+      <strong>Optional lunch challenge:</strong> Try using Claude Code or Copilot
+      on a real task from your own project. Come back with a story!
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 5: MODELS, COST & PERFORMANCE                         -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 5</div>
+    <h1>Choosing Your AI</h1>
+    <p class="subtitle">Models, Cost &amp; Performance</p>
+  </section>
+
+  <section>
+    <h2>What Makes Models Different?</h2>
+    <div style="font-size: 0.7em;">
+      <p>Three main factors:</p>
+      <br>
+      <div class="two-column">
+        <div>
+          <p><strong>Size (Parameters)</strong><br>
+          More parameters = more capable<br>
+          but slower and more expensive</p>
+          <br>
+          <p><strong>Training Data</strong><br>
+          What it learned from determines<br>
+          what it's good at</p>
+        </div>
+        <div>
+          <p><strong>Architecture &amp; Fine-tuning</strong><br>
+          How it's built and optimized<br>
+          for specific tasks</p>
+          <br>
+          <p><strong>Reasoning capability</strong><br>
+          Some models "think" step-by-step<br>
+          (o3, extended thinking)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Claude Family</h2>
+    <div style="font-size: 0.65em;">
+      <table class="comparison-table">
+        <tr><th>Model</th><th>Best For</th><th>Speed</th><th>Cost</th></tr>
+        <tr>
+          <td><strong>Haiku 4.5</strong></td>
+          <td>Quick completions, simple tasks, high volume</td>
+          <td class="cost-green">Very Fast</td>
+          <td class="cost-green">$0.80 / $4 per 1M tokens</td>
+        </tr>
+        <tr>
+          <td><strong>Sonnet 4.6</strong></td>
+          <td>Balanced: code generation, review, explanation</td>
+          <td class="cost-yellow">Fast</td>
+          <td class="cost-yellow">$3 / $15 per 1M tokens</td>
+        </tr>
+        <tr>
+          <td><strong>Opus 4.7</strong></td>
+          <td>Complex reasoning, architecture, multi-file refactoring</td>
+          <td class="cost-red">Slower</td>
+          <td class="cost-red">$15 / $75 per 1M tokens</td>
+        </tr>
+      </table>
+      <p style="margin-top: 0.5em; color: #888;">Costs shown as input / output per 1M tokens</p>
+    </div>
+    <aside class="notes">
+      Costs change - these are approximate. The key insight is the
+      10-20x cost difference between tiers. For most daily coding,
+      Sonnet is the sweet spot.
+    </aside>
+  </section>
+
+  <section>
+    <h2>OpenAI Models</h2>
+    <div style="font-size: 0.65em;">
+      <table class="comparison-table">
+        <tr><th>Model</th><th>Best For</th><th>Notes</th></tr>
+        <tr>
+          <td><strong>GPT-4o</strong></td>
+          <td>General coding, multimodal (images)</td>
+          <td>Fast, good all-rounder</td>
+        </tr>
+        <tr>
+          <td><strong>GPT-4.1</strong></td>
+          <td>Coding tasks, instruction following</td>
+          <td>Optimized for developer workflows</td>
+        </tr>
+        <tr>
+          <td><strong>o3</strong></td>
+          <td>Complex reasoning, math, hard bugs</td>
+          <td>"Thinking" model - slower but more thorough</td>
+        </tr>
+        <tr>
+          <td><strong>o4-mini</strong></td>
+          <td>Reasoning at lower cost</td>
+          <td>Good balance of thinking + speed</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Google &amp; Open Source</h2>
+    <div style="font-size: 0.65em;">
+      <table class="comparison-table">
+        <tr><th>Model</th><th>Best For</th><th>Notes</th></tr>
+        <tr>
+          <td><strong>Gemini 2.5 Pro</strong></td>
+          <td>Large context tasks (1M tokens!)</td>
+          <td>Great for analyzing entire codebases</td>
+        </tr>
+        <tr>
+          <td><strong>Gemini 2.5 Flash</strong></td>
+          <td>Fast, cheap general tasks</td>
+          <td>Good Haiku alternative</td>
+        </tr>
+        <tr>
+          <td><strong>Llama 4 (Meta)</strong></td>
+          <td>Self-hosted, privacy-sensitive work</td>
+          <td>Free, runs locally, good for sensitive code</td>
+        </tr>
+        <tr>
+          <td><strong>DeepSeek V3</strong></td>
+          <td>Cost-effective coding</td>
+          <td>Strong coding performance, very cheap</td>
+        </tr>
+      </table>
+      <br>
+      <div class="highlight-box">
+        <strong>Open source advantage:</strong> Run on your own hardware.
+        Your code never leaves your network.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The Triangle: Pick Two</h2>
+    <div style="font-size: 0.8em; text-align: center;">
+      <pre style="font-size: 0.8em; text-align: center; background: none; box-shadow: none;">
+         QUALITY
+          /\
+         /  \
+        /    \
+       /______\
+    SPEED    COST
+      </pre>
+      <div class="two-column" style="font-size: 0.75em;">
+        <div>
+          <p><strong>Quality + Speed</strong> = Expensive<br>
+          <span style="color: #888;">(Opus, GPT-4.1)</span></p>
+        </div>
+        <div>
+          <p><strong>Quality + Cheap</strong> = Slow<br>
+          <span style="color: #888;">(Reasoning models with wait)</span></p>
+        </div>
+      </div>
+      <p style="font-size: 0.75em;"><strong>Speed + Cheap</strong> = Lower quality<br>
+      <span style="color: #888;">(Haiku, Flash, small models)</span></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Decision Framework</h2>
+    <div style="font-size: 0.7em;">
+      <table class="comparison-table">
+        <tr><th>Task</th><th>Recommended Model</th><th>Why</th></tr>
+        <tr>
+          <td>Autocomplete / boilerplate</td>
+          <td>Haiku / Copilot</td>
+          <td>Speed matters most</td>
+        </tr>
+        <tr>
+          <td>Write a new function</td>
+          <td>Sonnet / GPT-4o</td>
+          <td>Good balance</td>
+        </tr>
+        <tr>
+          <td>Code review</td>
+          <td>Sonnet / GPT-4.1</td>
+          <td>Needs understanding, not creativity</td>
+        </tr>
+        <tr>
+          <td>Complex refactoring</td>
+          <td>Opus / GPT-4.1</td>
+          <td>Multi-file awareness needed</td>
+        </tr>
+        <tr>
+          <td>Debug a hard bug</td>
+          <td>Opus / o3</td>
+          <td>Deep reasoning required</td>
+        </tr>
+        <tr>
+          <td>Explain code to me</td>
+          <td>Sonnet / GPT-4o</td>
+          <td>Good enough, save money</td>
+        </tr>
+      </table>
+    </div>
+    <aside class="notes">
+      Emphasize: start with Sonnet/balanced model. Only go to Opus/o3
+      when the task actually requires deep reasoning. Most tasks don't.
+    </aside>
+  </section>
+
+  <section>
+    <h2>What is a Token?</h2>
+    <div style="font-size: 0.75em;">
+      <p>Tokens are how models measure text. Roughly:</p>
+      <ul>
+        <li>1 token &#8776; 4 characters in English</li>
+        <li>1 token &#8776; 0.75 words</li>
+        <li>100 lines of Python &#8776; 500-800 tokens</li>
+      </ul>
+      <br>
+      <div class="highlight-box">
+        <strong>Quick math:</strong> A 10,000-token conversation with Sonnet costs about $0.03 input + $0.15 output = <strong>$0.18</strong>
+      </div>
+      <p class="fragment">Costs add up with heavy use. But one hour of developer time costs far more than a day of AI tokens.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Switching Models in Practice</h2>
+    <div style="font-size: 0.75em;">
+      <p><strong>Claude Code:</strong></p>
+      <pre><code class="language-bash">> /model
+# Select from available models
+# Or: /model sonnet, /model opus, /model haiku</code></pre>
+      <br>
+      <p><strong>GitHub Copilot:</strong></p>
+      <p>Settings > Copilot > Model selector in chat panel</p>
+      <br>
+      <div class="tip-box">
+        Start every task with the cheapest model that could work.
+        Upgrade only if the output quality isn't sufficient.
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 6: CLAUDE CODE DEEP DIVE                              -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 6</div>
+    <h1>Power User Mode</h1>
+    <p class="subtitle">Claude Code Deep Dive</p>
+  </section>
+
+  <section>
+    <h2>The Basics</h2>
+    <div style="font-size: 0.75em;">
+      <pre><code class="language-bash"># Start Claude Code
+$ claude
+
+# Start with a specific task
+$ claude "explain what app.py does"
+
+# One-shot: run and exit
+$ claude -p "list all TODO comments in this project"</code></pre>
+      <p class="fragment">Claude Code operates in your terminal, in your project directory.
+      It can see and modify your files.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Essential Slash Commands</h2>
+    <div style="font-size: 0.65em;">
+      <table class="comparison-table">
+        <tr><th>Command</th><th>What it Does</th><th>When to Use</th></tr>
+        <tr>
+          <td><code>/help</code></td>
+          <td>Show all commands</td>
+          <td>When you're lost</td>
+        </tr>
+        <tr>
+          <td><code>/model</code></td>
+          <td>Switch AI model</td>
+          <td>Need more/less power</td>
+        </tr>
+        <tr>
+          <td><code>/clear</code></td>
+          <td>Reset conversation</td>
+          <td>Starting fresh, AI is confused</td>
+        </tr>
+        <tr>
+          <td><code>/compact</code></td>
+          <td>Summarize context</td>
+          <td>Running low on context window</td>
+        </tr>
+        <tr>
+          <td><code>/init</code></td>
+          <td>Generate CLAUDE.md</td>
+          <td>New project setup</td>
+        </tr>
+        <tr>
+          <td><code>/review</code></td>
+          <td>Review code changes</td>
+          <td>Before committing</td>
+        </tr>
+        <tr>
+          <td><code>/plan</code></td>
+          <td>Enter plan mode</td>
+          <td>Complex tasks: think before doing</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Plan Mode: Think Before Doing</h2>
+    <div style="font-size: 0.75em;">
+      <pre><code class="language-bash">> /plan
+> Add authentication with JWT to the API. We need register,
+  login, and a decorator for protected endpoints.</code></pre>
+      <p>In plan mode, Claude Code:</p>
+      <ol>
+        <li>Explores your codebase</li>
+        <li>Designs an approach</li>
+        <li>Presents a plan for your review</li>
+        <li>Only implements after you approve</li>
+      </ol>
+      <div class="tip-box fragment">
+        Use plan mode for any task that touches 3+ files or
+        takes more than a few minutes.
+      </div>
+    </div>
+    <aside class="notes">
+      DEMO: Use /plan to show the workflow. Let the audience see
+      the plan before approving. Show that you can redirect it.
+    </aside>
+  </section>
+
+  <section>
+    <h2>How Claude Code Works</h2>
+    <div style="font-size: 0.7em;">
+      <p>Under the hood, Claude Code follows a loop:</p>
+      <br>
+      <ol>
+        <li><strong>Read</strong> &mdash; Examine relevant files (glob, grep, read)</li>
+        <li><strong>Think</strong> &mdash; Analyze the problem with full context</li>
+        <li><strong>Act</strong> &mdash; Edit files, run commands, create tests</li>
+        <li><strong>Verify</strong> &mdash; Run tests, check output</li>
+        <li><strong>Report</strong> &mdash; Tell you what it did</li>
+      </ol>
+      <br>
+      <p class="fragment">You can see each step happening in real time.<br>
+      <strong>You approve or deny each action.</strong></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Permissions &amp; Safety</h2>
+    <div style="font-size: 0.7em;">
+      <p>Claude Code asks permission before:</p>
+      <ul>
+        <li>Editing files</li>
+        <li>Running shell commands</li>
+        <li>Installing packages</li>
+        <li>Making network requests</li>
+      </ul>
+      <br>
+      <div class="warning-box">
+        <strong>Always review</strong> before approving. The AI can make mistakes.
+        You are the final check.
+      </div>
+      <br>
+      <p class="fragment">Configure trust levels in <code>.claude/settings.json</code>
+      to auto-approve safe operations.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>When It Goes Off Track</h2>
+    <div style="font-size: 0.7em;">
+      <table class="comparison-table">
+        <tr><th>Symptom</th><th>Fix</th></tr>
+        <tr>
+          <td>Wrong approach entirely</td>
+          <td><code>/clear</code> and start with a more specific prompt</td>
+        </tr>
+        <tr>
+          <td>Right idea, wrong details</td>
+          <td>Correct it: "No, use X instead of Y"</td>
+        </tr>
+        <tr>
+          <td>Editing wrong files</td>
+          <td>"Stop. Only modify app.py and tests/"</td>
+        </tr>
+        <tr>
+          <td>Over-engineering</td>
+          <td>"Simpler. Just do X, nothing else."</td>
+        </tr>
+        <tr>
+          <td>Context seems confused</td>
+          <td><code>/compact</code> to summarize, or <code>/clear</code></td>
+        </tr>
+      </table>
+    </div>
+    <div class="tip-box fragment" style="font-size: 0.65em;">
+      Think of it as pair programming. You're the senior dev &mdash;
+      redirect early and often.
+    </div>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 6.1: Feature Sprint</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-6.1-feature-sprint/</code></p>
+      <br>
+      <ol>
+        <li>Read the CLAUDE.md and explore the project</li>
+        <li>Read the feature spec</li>
+        <li>Use <code>/plan</code> to plan the implementation</li>
+        <li>Review and approve the plan</li>
+        <li>Let Claude Code implement it</li>
+        <li>Run <code>pytest</code> to verify</li>
+        <li>Use <code>/review</code> to review the code</li>
+      </ol>
+      <br>
+      <p><strong>Time: 25 minutes</strong></p>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 7: GITHUB COPILOT DEEP DIVE                           -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 7</div>
+    <h1>Your AI Pair Programmer</h1>
+    <p class="subtitle">GitHub Copilot Deep Dive</p>
+  </section>
+
+  <section>
+    <h2>Inline Completions</h2>
+    <div style="font-size: 0.7em;">
+      <p>Copilot suggests code as you type. The ghost text appears in gray.</p>
+      <br>
+      <table class="comparison-table">
+        <tr><th>Action</th><th>Shortcut</th></tr>
+        <tr><td>Accept suggestion</td><td><code>Tab</code></td></tr>
+        <tr><td>Reject suggestion</td><td><code>Esc</code></td></tr>
+        <tr><td>Next suggestion</td><td><code>Alt + ]</code></td></tr>
+        <tr><td>Previous suggestion</td><td><code>Alt + [</code></td></tr>
+        <tr><td>Trigger manually</td><td><code>Alt + \</code></td></tr>
+      </table>
+      <br>
+      <div class="tip-box">
+        Write a descriptive function name and docstring first &mdash;
+        Copilot uses them to generate better code.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Getting Better Suggestions</h2>
+    <div style="font-size: 0.7em;">
+      <p>Copilot reads context from your IDE to generate suggestions:</p>
+      <br>
+      <ul>
+        <li><strong>Current file</strong> &mdash; Most important context</li>
+        <li><strong>Open tabs</strong> &mdash; Keep relevant files open</li>
+        <li><strong>File name</strong> &mdash; <code>test_users.py</code> hints at testing</li>
+        <li><strong>Comments</strong> &mdash; Describe what you want above the cursor</li>
+        <li><strong>Type hints</strong> &mdash; Help Copilot understand types</li>
+      </ul>
+      <br>
+      <div class="highlight-box">
+        <strong>Pro tip:</strong> Write a comment describing what the next function
+        should do, then let Copilot generate it.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Copilot Chat</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open the chat panel in VS Code for interactive help:</p>
+      <br>
+      <ul>
+        <li><strong>/explain</strong> &mdash; Explain selected code</li>
+        <li><strong>/fix</strong> &mdash; Fix a problem in selected code</li>
+        <li><strong>/tests</strong> &mdash; Generate tests for selected code</li>
+        <li><strong>@workspace</strong> &mdash; Ask about the whole project</li>
+      </ul>
+      <br>
+      <p class="fragment">Chat has more context than inline completions.
+      Use it for questions and complex tasks.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Copilot in the Terminal</h2>
+    <div style="font-size: 0.75em;">
+      <pre><code class="language-bash"># Suggest a command
+$ gh copilot suggest "find all Python files modified today"
+
+# Explain a command
+$ gh copilot explain "find . -name '*.py' -mtime -1"</code></pre>
+      <p class="fragment">Great for shell commands you don't remember.
+      Like a smart <code>man</code> page.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Copilot vs Claude Code</h2>
+    <div style="font-size: 0.65em;">
+      <table class="comparison-table">
+        <tr><th>Criteria</th><th>GitHub Copilot</th><th>Claude Code</th></tr>
+        <tr>
+          <td>Interface</td>
+          <td>IDE integration</td>
+          <td>Terminal CLI</td>
+        </tr>
+        <tr>
+          <td>Best for</td>
+          <td>Line-by-line coding</td>
+          <td>Multi-file tasks</td>
+        </tr>
+        <tr>
+          <td>Context source</td>
+          <td>Open files, IDE</td>
+          <td>Full codebase access</td>
+        </tr>
+        <tr>
+          <td>Autonomy</td>
+          <td>Suggests, you decide</td>
+          <td>Can act independently</td>
+        </tr>
+        <tr>
+          <td>Learning curve</td>
+          <td>Very low</td>
+          <td>Moderate</td>
+        </tr>
+        <tr>
+          <td>Use when...</td>
+          <td>Writing new code</td>
+          <td>Refactoring, debugging, planning</td>
+        </tr>
+      </table>
+    </div>
+    <div class="tip-box fragment" style="font-size: 0.65em;">
+      They complement each other. Use both! Copilot for flow,
+      Claude Code for heavy lifting.
+    </div>
+  </section>
+
+  <section data-state="exercise-slide">
+    <h2>Exercise 7.1: Side by Side</h2>
+    <div style="font-size: 0.75em;">
+      <p>Open <code>exercises/exercise-7.1-side-by-side/</code></p>
+      <br>
+      <ol>
+        <li>Read the feature spec</li>
+        <li><strong>Round 1:</strong> Implement with Copilot (inline + chat)</li>
+        <li><strong>Round 2:</strong> Reset and implement with Claude Code</li>
+        <li>Fill out the comparison worksheet</li>
+        <li>Discuss: Which tool for which situation?</li>
+      </ol>
+      <br>
+      <p><strong>Time: 20 minutes</strong></p>
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- MODULE 8: WRAP-UP & CONTINUOUS LEARNING                      -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Module 8</div>
+    <h1>Wrap-Up</h1>
+    <p class="subtitle">Key Takeaways &amp; Continuous Learning</p>
+  </section>
+
+  <section>
+    <h2>The 5 Things to Remember</h2>
+    <div style="font-size: 0.7em;">
+      <ol>
+        <li class="fragment"><strong>Context is everything</strong> &mdash; AI starts blank. Feed it well.</li>
+        <li class="fragment"><strong>Be specific</strong> &mdash; Vague prompts get vague answers.</li>
+        <li class="fragment"><strong>Use CLAUDE.md</strong> &mdash; Write it once, benefit every conversation.</li>
+        <li class="fragment"><strong>Right model, right task</strong> &mdash; Don't use Opus for autocomplete.</li>
+        <li class="fragment"><strong>You're still the developer</strong> &mdash; Review everything. AI assists, you decide.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <h2>Security Considerations</h2>
+    <div style="font-size: 0.7em;">
+      <div class="warning-box">
+        <ul>
+          <li><strong>Never paste secrets</strong> into AI prompts (API keys, passwords, tokens)</li>
+          <li><strong>Review generated code</strong> for security vulnerabilities (SQL injection, XSS)</li>
+          <li><strong>Understand data flow</strong> &mdash; your code is sent to external APIs</li>
+          <li><strong>Check licenses</strong> &mdash; AI-generated code may echo training data</li>
+          <li><strong>Don't blindly run</strong> suggested shell commands</li>
+        </ul>
+      </div>
+      <br>
+      <div class="tip-box">
+        Treat AI-generated code the same way you'd treat a junior developer's PR:
+        <strong>always review before merge</strong>.
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Team Conventions</h2>
+    <div style="font-size: 0.75em;">
+      <p>Things to agree on as a team:</p>
+      <ul>
+        <li>Shared <strong>CLAUDE.md</strong> in every repo (commit it!)</li>
+        <li>A team <strong>prompt library</strong> (shared .md templates)</li>
+        <li><strong>Model guidelines</strong> &mdash; which model for what</li>
+        <li><strong>Review standards</strong> &mdash; AI code gets the same review as human code</li>
+        <li><strong>Budget awareness</strong> &mdash; track token usage</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Keep Learning: YouTube</h2>
+    <div style="font-size: 0.65em;">
+      <h3>Claude Code</h3>
+      <ul>
+        <li><strong>IndyDevDan</strong> &mdash; Claude Code Deep Mastery playlist (start here)</li>
+        <li>Claude Code - Full Tutorial for Beginners</li>
+      </ul>
+      <br>
+      <h3>GitHub Copilot</h3>
+      <ul>
+        <li>How to use GitHub Copilot (complete beginner's guide)</li>
+        <li>Getting Started with GitHub Copilot in VS Code</li>
+      </ul>
+      <br>
+      <h3>Prompt Engineering</h3>
+      <ul>
+        <li>Prompt Engineering Tutorial &mdash; Master ChatGPT and LLM Responses</li>
+        <li>Prompt Engineering Full Course</li>
+      </ul>
+    </div>
+    <aside class="notes">
+      Full URLs are in the resources handout. These are curated
+      as the best beginner-friendly resources available.
+    </aside>
+  </section>
+
+  <section>
+    <h2>Keep Learning: Courses &amp; Docs</h2>
+    <div style="font-size: 0.65em;">
+      <h3>LinkedIn Learning</h3>
+      <ul>
+        <li>AI Pair Programming with GitHub Copilot (1.5 hrs)</li>
+        <li>Master GitHub Copilot Learning Path</li>
+      </ul>
+      <br>
+      <h3>Official Documentation</h3>
+      <ul>
+        <li>Claude Code Docs &mdash; code.claude.com/docs</li>
+        <li>Anthropic Prompt Engineering Guide</li>
+        <li>Anthropic Interactive Prompt Tutorial (GitHub, 9 chapters)</li>
+        <li>GitHub Copilot Docs &amp; Best Practices</li>
+      </ul>
+      <br>
+      <h3>Articles</h3>
+      <ul>
+        <li>freeCodeCamp: How to Become an Expert in AI-Assisted Coding</li>
+        <li>Addy Osmani: My LLM Coding Workflow</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Q&amp;A</h2>
+    <br>
+    <p style="font-size: 0.8em;">What questions do you have?</p>
+    <br>
+    <div class="tip-box" style="font-size: 0.7em;">
+      <strong>Tomorrow:</strong> Try using Claude Code or Copilot on a real task.
+      Spend 30 minutes. See how it changes your workflow.
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- BONUS: MCP                                                    -->
+<!-- ============================================================ -->
+<section>
+  <section>
+    <div class="module-badge">Bonus</div>
+    <h1>MCP</h1>
+    <p class="subtitle">Connecting AI to Your Tools</p>
+  </section>
+
+  <section>
+    <h2>What is MCP?</h2>
+    <div style="font-size: 0.75em;">
+      <div class="highlight-box">
+        <p><strong>Model Context Protocol</strong> &mdash; A standard way to connect
+        AI assistants to external tools and data sources.</p>
+      </div>
+      <br>
+      <p>Think of it as "plugins" for Claude Code:</p>
+      <ul>
+        <li>Query a database directly</li>
+        <li>Read from internal APIs</li>
+        <li>Access documentation systems</li>
+        <li>Interact with cloud services</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>How MCP Works</h2>
+    <div style="font-size: 0.7em;">
+      <pre><code class="language-text" data-trim>
+    You (Claude Code)  <-->  MCP Server  <-->  External Tool
+        "Query the         Translates        Database
+         users table"      to SQL             (PostgreSQL)
+      </code></pre>
+      <br>
+      <p>MCP servers run locally and expose tools that Claude Code can call.
+      You configure them in <code>.claude/settings.json</code>:</p>
+      <pre><code class="language-json" data-trim>
+{
+  "mcpServers": {
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-sqlite", "books.db"]
+    }
+  }
+}
+      </code></pre>
+    </div>
+  </section>
+
+  <section>
+    <h2>When to Use MCP</h2>
+    <div class="two-column" style="font-size: 0.7em;">
+      <div>
+        <h3 style="color: #00ff88;">Good Use Cases</h3>
+        <ul>
+          <li>Database exploration</li>
+          <li>Internal API integration</li>
+          <li>Documentation lookup</li>
+          <li>Cloud service management</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color: #ff6666;">Probably Not Worth It</h3>
+        <ul>
+          <li>Simple file-based projects</li>
+          <li>One-time tasks</li>
+          <li>When copy-paste is faster</li>
+          <li>Sensitive production systems</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-box fragment" style="font-size: 0.65em;">
+      MCP shines when you repeatedly need AI to access the same external system.
+    </div>
+  </section>
+</section>
+
+<!-- ============================================================ -->
+<!-- END SLIDE                                                     -->
+<!-- ============================================================ -->
+<section>
+  <h1>Thank You!</h1>
+  <p class="subtitle">Now go build something with AI</p>
+  <br>
+  <p style="font-size: 0.6em; color: #666;">Course materials: <code>exercises/</code> directory<br>
+  Resources: see Module 8 slides</p>
+</section>
+
+</div>
+</div>
+
+<script src="node_modules/reveal.js/dist/reveal.js"></script>
+<script src="node_modules/reveal.js/dist/plugin/highlight.js"></script>
+<script src="node_modules/reveal.js/dist/plugin/notes.js"></script>
+<script>
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  showSlideNumber: 'all',
+  transition: 'slide',
+  plugins: [RevealHighlight, RevealNotes],
+  width: 1280,
+  height: 720,
+});
+</script>
+</body>
+</html>
