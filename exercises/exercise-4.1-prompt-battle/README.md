@@ -20,7 +20,6 @@ Learn that **prompt quality directly impacts output quality**. Two developers wr
 ## Rules
 
 - You can **iterate on your prompt up to 3 times**. Your final result is what gets judged.
-- Do not copy your partner's prompt or look at their screen while writing.
 - You may include as much or as little context in your prompt as you like -- that is the whole point of the exercise.
 - Keep track of each version of your prompt so you can discuss what you changed and why.
 
